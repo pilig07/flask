@@ -1,0 +1,66 @@
+{% extends './layout.html' %}
+
+
+{% block body %}
+{% if current_user.is_authenticated %}
+  {% if idR == 1%}
+    {% include './admin.html' %}
+  {% else %}
+    {% include './usuario.html' %}
+  {% endif %}
+{% endif %}
+<br><br>
+<div class="container">
+    <p class="h3 text-center">Estos son los directorios disponibles escoge uno para comenzar</p>
+    <br>
+    <br>
+    {% with messages = get_flashed_messages() %}
+
+    {% if messages %}
+    <br />
+    {% for message in messages %}
+    <div class="alert alert-primary alert-dismissible" role="alert">
+        <strong>{{ message }}</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+    <div class="card text-center">
+      <div class="card-header">
+          Selecciona un directorio para trabajar
+      </div>
+      <div class="card-body">
+        <form form action="/escoger" method="POST" enctype = "multipart/form-data">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token()}}">
+          <input type="hidden" name="idU" value="{{current_user.id}}">
+          <div class="mb-3">
+            <select class="form-select" aria-label="Default select example" name="comp_select">
+              {% for d in direc %}
+                <option value="{{d}}">{{d}}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <button type="submit" class="btn btn-primary">Seleccionar</button>
+        </form>
+      </div>
+    </div>
+    <br><br>
+    <div class="container">
+      <ol class="list-group">
+        {% for d in direc %}
+          <li class="list-group-item d-flex justify-content-between align-items-start">
+            <div class="ms-2 me-auto">
+              <div class="fw-bold">Directorio {{d}}</div>
+              {% if n >5 %}
+                  {{cd[d]}}
+              {% else %}
+                {{cd[d-1]}}
+              {% endif %}
+            </div>
+          {% endfor %}
+      </ol>
+    </div>
+</div>
+{%include 'footer.html'%}
+{% endblock %}

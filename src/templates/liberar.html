@@ -1,0 +1,24 @@
+{% extends './layout.html' %}
+
+{% block body %}
+{% if current_user.is_authenticated %}
+  {% if idR == 1%}
+    {% include './admin.html' %}
+  {% else %}
+    {% include './usuario.html' %}
+  {% endif %}
+{% endif %}
+<br><br>
+
+
+<div class="px-4 py-5 my-5 text-center">
+    <h1 class="display-5 fw-bold">¡El directorio fue liberado con éxito!</h1>
+    <div class="col-lg-6 mx-auto">
+      <p class="lead mb-4">Por favor regresa a la pantalla principal para iniciar con otro cálculo</p>
+    </div>
+  </div>
+
+  <br><br><br><br><br><br>
+  {%include 'footer.html'%}
+{% endblock %}
+

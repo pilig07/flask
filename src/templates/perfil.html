@@ -1,0 +1,76 @@
+{% extends './layout.html' %}
+
+{% block body %}
+<!-- As a link -->
+{% if current_user.is_authenticated %}
+  {% if idR == 1%}
+    {% include './admin.html' %}
+  {% else %}
+    {% include './usuario.html' %}
+  {% endif %}
+{% endif %}
+<br><br><br><br><br>
+
+{% with messages = get_flashed_messages() %}
+
+    {% if messages %}
+    <br />
+    {% for message in messages %}
+    <div class="container-fluid">
+      <div class="alert alert-primary alert-dismissible" role="alert">
+        <strong>{{ message }}</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    </div>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+
+<div class="card text-center mx-auto"style="width: 30rem;">
+    <h5 class="card-header">¡Bienvenido! {{user[2]}}</h5>
+    <div class="card-body">
+      <h5 class="card-title">Este es tu perfil</h5>
+      <p class="card-text">Estos son tus datos, recuerda que el único dato que puedes cambiar es tu contraseña</p>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item">Username: {{user[1]}}</li>
+        <li class="list-group-item">Fullname: {{user[2]}}</li>
+      </ul>
+      <br>
+      <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+        Cambiar contraseña
+      </button>
+    </div>
+  </div>
+</div>
+<br><br><br><br><br>
+{%include 'footer.html'%}
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Restaurar contraseña</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form form action="/perfil" method="POST" enctype="multipart/form-data">
+          <input type="hidden" name="id" value="{{current_user.id}}">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token()}}">
+          <div class="mb-3">
+            <label for="recipient-name" class="col-form-label">Nueva contraseña:</label>
+            <input type="password" class="form-control" id="pw1" name="pwd1">
+          </div>
+          <div class="mb-3">
+            <label for="recipient-name" class="col-form-label">Repetir contraseña:</label>
+            <input type="password" class="form-control" id="pwd2" name="pwd2">
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Guardar</button>
+          </div>
+        </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
+

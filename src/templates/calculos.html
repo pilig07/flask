@@ -1,0 +1,43 @@
+{% extends './layout.html' %}
+
+{% block body %}
+{% if current_user.is_authenticated %}
+  {% if idR == 1%}
+    {% include './admin.html' %}
+  {% else %}
+    {% include './usuario.html' %}
+  {% endif %}
+{% endif %}
+<br><br><br><br><br>
+<div class="container-fluid">
+    <p class="h2 text-center">Iniciar con los cálculos</p>
+    <br>
+    {% with messages = get_flashed_messages() %}
+
+    {% if messages %}
+    <br />
+    {% for message in messages %}
+    <div class="alert alert-primary alert-dismissible text-center" role="alert">
+        <strong>{{ message }}</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+    <h1 class="h5 text-center">El servidor que estas utilizando es el: {{id}}</h1>
+    <br>
+    <div class="card text-center mx-auto" style="width: 30rem;">
+      <div class="card-body">
+        <p class="card-text">Una vez presiones el botón los cálculos iniciaran, porfavor revisa que todo este bien</p>
+        <form form action="/calculos" method="POST" enctype = "multipart/form-data">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token()}}">
+          <input type="hidden" name="server" value="{{id}}">
+          <input type="hidden" name="idU" value="{{current_user.id}}">
+          <button type="submit" class="btn btn-primary">Calcular</button>
+        </form>
+      </div>
+    </div>
+</div>
+<br><br><br><br><br><br><br>
+{%include 'footer.html'%}
+{% endblock %}

@@ -1,0 +1,62 @@
+{% extends './layout.html' %}
+
+{% block body %}
+<!-- As a link -->
+{% if current_user.is_authenticated %}
+  {% if idR == 1%}
+    {% include './admin.html' %}
+  {% else %}
+    {% include './usuario.html' %}
+  {% endif %}
+{% endif %}
+<br><br><br><br><br>
+
+{% with messages = get_flashed_messages() %}
+
+    {% if messages %}
+    <br />
+    {% for message in messages %}
+    <div class="container-fluid">
+      <div class="alert alert-primary alert-dismissible" role="alert">
+        <strong>{{ message }}</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    </div>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+
+    <div class="container-fluid mx-auto">
+      <div class="card text-center mx-auto" style="width: 50rem;">
+        <div class="card-header">
+          Dar de alta usuario
+        </div>
+        <div class="card-body">
+          <h5 class="card-title">Completa el siguiente formulario para agregar al usuario</h5>
+          <p class="card-text">
+            <form action="/add" method="POST" enctype = "multipart/form-data">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token()}}">
+              <input type="hidden" name="idRol" value="2">
+              <div class="mb-3">
+                <label for="username" class="form-label">Username</label>
+                <input type="text" class="form-control" id="username" name="username" required>
+                <label for="password" class="form-label">Contraseña</label>
+                <input type="password" class="form-control" id="password" name="password" required>
+                <label for="password2" class="form-label">Repetir Contraseña</label>
+                <input type="password" class="form-control" id="password2" name="password2"required>
+                <label for="FullName" class="form-label">Nombre</label>
+                <input type="text" class="form-control" id="fullName" name="fullName" required> 
+              </div>
+              <button type="submit" class="btn btn-primary">Añadir</button>
+            </form>
+          </p>
+        </div>
+        <div class="card-footer text-muted">
+          Recuerda que el alumno podrá cambiar su contraseña en su perfil
+        </div>
+      </div>
+    </div>
+{%include 'footer.html'%}
+
+{% endblock %}
+

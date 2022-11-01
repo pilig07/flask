@@ -1,0 +1,67 @@
+{% extends './layout.html' %}
+
+
+{% block body %}
+{% if current_user.is_authenticated %}
+  {% if idR == 1%}
+    {% include './admin.html' %}
+  {% else %}
+    {% include './usuario.html' %}
+  {% endif %}
+{% endif %}
+<br><br>
+<div class="container">
+    <p class="h2">Sube tus archivos al servidor</p>
+    <br>
+    {% with messages = get_flashed_messages() %}
+
+    {% if messages %}
+    <br />
+    {% for message in messages %}
+    <div class="alert alert-primary alert-dismissible" role="alert">
+        <strong>{{ message }}</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endfor %}
+    {% if continuar%}
+      <form action="/calculos" method="GET" enctype = "multipart/form-data">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token()}}">
+        <input type="hidden" name="server" value="{{id}}">
+        <input type="hidden" name="idU" value="{{current_user.id}}">
+        <button type="submit" class="btn btn-success btn-lg">Continuar</button>
+      </form>
+    {% endif %}
+    {% endif %}
+    {% endwith %}
+    <h1 class="h5">El servidor que estas utilizando es el: {{id}}</h1>
+    <br>
+    <div class="card text-center">
+      <div class="card-header">
+          Selecciona los archivos a subir
+      </div>
+      <div class="card-body">
+        <form action="/archivos" method="POST" enctype = "multipart/form-data">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token()}}">
+          <input type="hidden" name="server" value="{{id}}">
+          <input type="hidden" name="idU" value="{{current_user.id}}">
+          <div class="mb-3">
+            <label for="file1" class="form-label">Archivo 1</label>
+            <input type="file" class="form-control" id="file1" name="file1" accept=".input,.particles,.simulation,.simulation~,.potential" required>
+            <label for="file2" class="form-label">Archivo 2</label>
+            <input type="file" class="form-control" id="file2" name="file2" accept=".input,.particles,.simulation,.simulation~,.potential" required>
+            <label for="file3" class="form-label">Archivo 3</label>
+            <input type="file" class="form-control" id="file3" name="file3" accept=".input,.particles,.simulation,.simulation~,.potential" required>
+            <label for="file4" class="form-label">Archivo 4</label>
+            <input type="file" class="form-control" id="file4" name="file4" accept=".input,.particles,.simulation,.simulation~,.potential" required> 
+          </div>
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+      </div>
+      <div class="card-footer text-muted">
+        Recuerda que si los archivos no son de la extensión correcta no se van a recibir en el servidor (input,particles,potential,simulation)
+      </div>
+      
+    </div>
+</div>
+{%include 'footer.html'%}
+{% endblock %}

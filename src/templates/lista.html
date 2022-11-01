@@ -1,0 +1,69 @@
+{% extends './layout.html' %}
+
+{% block body %}
+{% if current_user.is_authenticated %}
+{% if idR == 1%}
+{% include './admin.html' %}
+{% else %}
+{% include './usuario.html' %}
+{% endif %}
+{% endif %}
+
+{% with messages = get_flashed_messages() %}
+
+    {% if messages %}
+    <br />
+    {% for message in messages %}
+    <div class="alert alert-primary alert-dismissible" role="alert">
+        <strong>{{ message }}</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+<div class="px-4 py-3 my-5 text-center">
+  <h1 class="display-5 fw-bold">Bienvenido al panel de administrador</h1>
+  <div class="col-lg-5 mx-auto">
+    <p class="lead mb-3">Aquí se podrán dar de alta y baja usuarios, así como ver todos los usuarios que actualmente
+      existen registrados</p>
+  </div>
+</div>
+<div class="container-md">
+  <div class="row ">
+    <div class="col">
+      <a href="/add" class="btn  btn-outline-success active float-end" role="button" aria-pressed="true">Añadir usuario</a>
+    </div>
+  </div>
+</div>
+<div class="container-md mx-auto">
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">#Id Usuario</th>
+        <th scope="col">Username</th>
+        <th scope="col">FullName</th>
+        <th scope="col">Acción</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for user in users %}
+      <tr>
+        <th scope="row">{{user.0}}</th>
+        <td>{{user.1}}</td>
+        <td>{{user.3}}</td>
+        <td>
+          <form action="/lista" method="POST" enctype = "multipart/form-data">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token()}}">
+              <input type="hidden" name="id" value="{{user.0}}">
+              <button type="submit" class="btn btn-danger">Eliminar</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+  </table>
+</div>
+
+<br><br><br><br><br><br>
+{%include 'footer.html'%}
+{% endblock %}
+
